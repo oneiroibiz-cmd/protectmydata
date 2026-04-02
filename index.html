@@ -1,27 +1,209 @@
-ProtectMyData
-How it works
-About
-Know what websites do with your data
-Instant privacy and cookie ratings — in plain English, no jargon.
-
-Check →
-Try:
-Facebook
-Google
-Netflix
-TikTok
-Amazon
-Apple
-HOW IT WORKS
-1
-Enter a website
-Type any URL or pick from popular sites
-2
-AI reads the policy
-We analyse their privacy and cookie practices
-3
-Get a plain score
-No jargon — just clear ratings and key facts
-ProtectMyData
-Free to use · No sign-up required · Built to help people understand their privacy rights
-Privacy Policy · About
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ProtectMyData — Know what websites do with your data</title>
+<style>
+  :root {
+    --bg: #f5f4f0;
+    --surface: #ffffff;
+    --border: rgba(0,0,0,0.08);
+    --border-strong: rgba(0,0,0,0.14);
+    --text: #0f0f0f;
+    --text-muted: #6b6b6b;
+    --text-faint: #aaaaaa;
+    --blue: #1a56db;
+    --blue-light: #e8f0fe;
+    --blue-text: #1a3c8f;
+    --green: #166534;
+    --green-light: #dcfce7;
+    --amber: #92400e;
+    --amber-light: #fef3c7;
+    --red: #991b1b;
+    --red-light: #fee2e2;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --radius-pill: 100px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.5; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 18px 32px; background: var(--surface); border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 100; }
+  .logo { font-size: 17px; font-weight: 500; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+  .logo span { color: var(--blue); }
+  .nav-links { display: flex; gap: 24px; }
+  .nav-link { font-size: 13px; color: var(--text-muted); text-decoration: none; }
+  .nav-link:hover { color: var(--text); }
+  main { max-width: 680px; margin: 0 auto; padding: 48px 24px 80px; }
+  .hero { text-align: center; margin-bottom: 40px; }
+  .hero h1 { font-size: 36px; font-weight: 500; letter-spacing: -0.03em; line-height: 1.15; margin-bottom: 10px; }
+  .hero h1 em { font-style: normal; color: var(--blue); }
+  .hero p { font-size: 15px; color: var(--text-muted); margin-bottom: 28px; }
+  .search-wrap { display: flex; gap: 8px; background: var(--surface); border: 1px solid var(--border-strong); border-radius: var(--radius); padding: 6px 6px 6px 16px; margin-bottom: 14px; }
+  .search-wrap:focus-within { border-color: var(--blue); }
+  #urlInput { flex: 1; border: none; outline: none; font-size: 14px; color: var(--text); background: transparent; }
+  #urlInput::placeholder { color: var(--text-faint); }
+  .btn-check { padding: 9px 20px; background: var(--blue); color: white; border: none; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; }
+  .btn-check:hover { opacity: 0.88; }
+  .btn-check:disabled { opacity: 0.45; cursor: default; }
+  .quick-sites { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
+  .quick-label { font-size: 12px; color: var(--text-faint); padding: 5px 0; }
+  .quick-btn { font-size: 12px; padding: 5px 12px; border-radius: var(--radius-pill); border: 1px solid var(--border-strong); background: var(--surface); color: var(--text-muted); cursor: pointer; }
+  .quick-btn:hover { background: var(--blue-light); color: var(--blue-text); border-color: var(--blue); }
+  #loadingState { display: none; text-align: center; padding: 40px 0; color: var(--text-muted); font-size: 14px; }
+  .spinner { width: 28px; height: 28px; border: 2px solid var(--border); border-top-color: var(--blue); border-radius: 50%; animation: spin 0.7s linear infinite; margin: 0 auto 12px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  #resultState { display: none; }
+  .result-main { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 10px; }
+  .result-top { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
+  .scores { display: flex; gap: 10px; flex-shrink: 0; }
+  .score-ring { width: 72px; height: 72px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid transparent; }
+  .score-ring .num { font-size: 26px; font-weight: 500; font-family: monospace; line-height: 1; }
+  .score-ring .lbl { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
+  .score-green { background: var(--green-light); border-color: rgba(22,101,52,0.2); }
+  .score-green .num { color: var(--green); }
+  .score-green .lbl { color: rgba(22,101,52,0.7); }
+  .score-amber { background: var(--amber-light); border-color: rgba(146,64,14,0.2); }
+  .score-amber .num { color: var(--amber); }
+  .score-amber .lbl { color: rgba(146,64,14,0.7); }
+  .score-red { background: var(--red-light); border-color: rgba(153,27,27,0.2); }
+  .score-red .num { color: var(--red); }
+  .score-red .lbl { color: rgba(153,27,27,0.7); }
+  .result-meta { flex: 1; min-width: 0; }
+  .result-site { font-size: 17px; font-weight: 500; margin-bottom: 3px; }
+  .result-verdict { font-size: 12px; color: var(--text-muted); margin-bottom: 10px; }
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; }
+  .chip { font-size: 11px; padding: 3px 10px; border-radius: var(--radius-pill); font-weight: 500; }
+  .chip-red { background: var(--red-light); color: var(--red); }
+  .chip-amber { background: var(--amber-light); color: var(--amber); }
+  .chip-green { background: var(--green-light); color: var(--green); }
+  .summary-text { font-size: 14px; color: var(--text-muted); line-height: 1.7; padding-top: 18px; border-top: 1px solid var(--border); }
+  .expand-btn { background: none; border: none; color: var(--blue); font-size: 12px; cursor: pointer; padding: 8px 0 0; display: block; }
+  .expand-btn:hover { text-decoration: underline; }
+  .detail-text { display: none; font-size: 13px; color: var(--text-muted); line-height: 1.7; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+  .detail-text.open { display: block; }
+  .stat-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 10px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
+  .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 5px; }
+  .stat-val { font-size: 13px; font-weight: 500; }
+  .val-red { color: var(--red); }
+  .val-amber { color: var(--amber); }
+  .val-green { color: var(--green); }
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn-secondary { font-size: 13px; padding: 9px 16px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); color: var(--text-muted); cursor: pointer; }
+  .btn-secondary:hover { background: var(--bg); color: var(--text); }
+  #recentSection { margin-top: 40px; }
+  .section-label { font-size: 12px; color: var(--text-faint); font-weight: 500; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 12px; }
+  .recent-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .recent-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; cursor: pointer; }
+  .recent-card:hover { border-color: var(--blue); }
+  .recent-name { font-size: 13px; font-weight: 500; margin-bottom: 6px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .recent-scores { display: flex; gap: 5px; }
+  .mini-chip { font-size: 10px; padding: 2px 7px; border-radius: var(--radius-pill); font-weight: 500; }
+  #how { margin-top: 56px; }
+  .how-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-top: 4px; }
+  .how-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 18px; }
+  .how-num { font-size: 22px; font-weight: 500; margin-bottom: 8px; color: var(--blue); }
+  .how-title { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .how-desc { font-size: 12px; color: var(--text-muted); }
+  .notice { font-size: 11px; color: var(--text-faint); text-align: center; margin-top: 8px; }
+  footer { text-align: center; padding: 32px 24px; font-size: 12px; color: var(--text-faint); border-top: 1px solid var(--border); margin-top: 60px; }
+  footer a { color: var(--text-faint); text-decoration: none; }
+  @media (max-width: 520px) {
+    nav { padding: 14px 18px; }
+    main { padding: 32px 16px 60px; }
+    .hero h1 { font-size: 26px; }
+    .recent-grid { grid-template-columns: 1fr 1fr; }
+    .stat-row { grid-template-columns: 1fr; }
+    .result-top { flex-direction: column; align-items: flex-start; }
+    .how-grid { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">Protect<span>My</span>Data</a>
+  <div class="nav-links">
+    <a href="#how" class="nav-link">How it works</a>
+    <a href="#about" class="nav-link">About</a>
+  </div>
+</nav>
+<main>
+  <div class="hero">
+    <h1>Know what websites do<br>with <em>your</em> data</h1>
+    <p>Instant privacy and cookie ratings — in plain English, no jargon.</p>
+    <div class="search-wrap">
+      <input type="text" id="urlInput" placeholder="Enter any website, e.g. facebook.com" autocomplete="off" />
+      <button class="btn-check" id="checkBtn" onclick="startScan()">Check →</button>
+    </div>
+    <div class="quick-sites">
+      <span class="quick-label">Try:</span>
+      <button class="quick-btn" onclick="qs('facebook.com')">Facebook</button>
+      <button class="quick-btn" onclick="qs('google.com')">Google</button>
+      <button class="quick-btn" onclick="qs('netflix.com')">Netflix</button>
+      <button class="quick-btn" onclick="qs('tiktok.com')">TikTok</button>
+      <button class="quick-btn" onclick="qs('amazon.com')">Amazon</button>
+      <button class="quick-btn" onclick="qs('apple.com')">Apple</button>
+    </div>
+  </div>
+  <div id="loadingState">
+    <div class="spinner"></div>
+    <div id="loadMsg">Analyzing privacy policy...</div>
+  </div>
+  <div id="resultState">
+    <div class="result-main">
+      <div class="result-top">
+        <div class="scores">
+          <div class="score-ring" id="privRing"><div class="num" id="privNum">—</div><div class="lbl">Privacy</div></div>
+          <div class="score-ring" id="cookRing"><div class="num" id="cookNum">—</div><div class="lbl">Cookies</div></div>
+        </div>
+        <div class="result-meta">
+          <div class="result-site" id="resultSite"></div>
+          <div class="result-verdict" id="resultVerdict"></div>
+          <div class="chips" id="resultChips"></div>
+        </div>
+      </div>
+      <div class="summary-text" id="summaryShort"></div>
+      <button class="expand-btn" id="expandBtn" onclick="toggleDetail()">Show full details ↓</button>
+      <div class="detail-text" id="detailText"></div>
+    </div>
+    <div class="stat-row">
+      <div class="stat-card"><div class="stat-label">Sells your data?</div><div class="stat-val" id="statSells">—</div></div>
+      <div class="stat-card"><div class="stat-label">Can you opt out?</div><div class="stat-val" id="statOptout">—</div></div>
+      <div class="stat-card"><div class="stat-label">GDPR compliant?</div><div class="stat-val" id="statGdpr">—</div></div>
+    </div>
+    <div class="actions" style="margin-bottom:10px;">
+      <button class="btn-secondary" onclick="reset()">← Check another site</button>
+    </div>
+    <div class="notice">Analysis is AI-generated based on publicly available privacy policies. For informational purposes only.</div>
+  </div>
+  <div id="recentSection" style="display:none;">
+    <div class="section-label">Recently checked</div>
+    <div class="recent-grid" id="recentGrid"></div>
+  </div>
+  <div id="how">
+    <div class="section-label">How it works</div>
+    <div class="how-grid">
+      <div class="how-card"><div class="how-num">1</div><div class="how-title">Enter a website</div><div class="how-desc">Type any URL or pick from popular sites</div></div>
+      <div class="how-card"><div class="how-num">2</div><div class="how-title">AI reads the policy</div><div class="how-desc">We analyse their privacy and cookie practices</div></div>
+      <div class="how-card"><div class="how-num">3</div><div class="how-title">Get a plain score</div><div class="how-desc">No jargon — just clear ratings and key facts</div></div>
+    </div>
+  </div>
+</main>
+<footer id="about">
+  <div style="margin-bottom:6px;font-size:13px;color:var(--text-muted);font-weight:500;">ProtectMyData</div>
+  Free to use · No sign-up required · Built to help people understand their privacy rights<br>
+  <span style="margin-top:6px;display:inline-block;"><a href="#">Privacy Policy</a> · <a href="#">About</a></span>
+</footer>
+<script>
+  const RECENT_KEY = 'pmd_recent';
+  function qs(url) { document.getElementById('urlInput').value = url; startScan(); }
+  function scoreClass(s) { if (s >= 7) return 'score-green'; if (s >= 5) return 'score-amber'; return 'score-red'; }
+  function verdictText(p, c) { const avg = (p + c) / 2; if (avg >= 7) return 'Generally privacy-friendly'; if (avg >= 5) return 'Average — some concerns'; if (avg >= 3) return 'Below average — notable concerns'; return 'Poor — significant privacy risks'; }
+  function statColor(val) { const v = (val || '').toLowerCase(); if (v.includes('yes') || v.includes('easy') || v.includes('partial')) return 'val-green'; if (v.includes('no') || v.includes('none') || v.includes('unclear')) return 'val-red'; return 'val-amber'; }
+  function toggleDetail() { const d = document.getElementById('detailText'); const b = document.getElementById('expandBtn'); const open = d.classList.toggle('open'); b.textContent = open ? 'Show less ↑' : 'Show full details ↓'; }
+  function reset() { document.getElementById('resultState').style.display = 'none'; document.getElementById('urlInput').value = ''; document.getElementById('checkBtn').disabled = false; document.getElementById('expandBtn').textContent = 'Show full details ↓'; document.getElementById('detailText').classList.remove('open'); loadRecent(); }
+  function saveRecent(data) { try { let recent = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); recent = recent.filter(r => r.site !== data.site); recent.unshift(data); recent = recent.slice(0, 6); localStorage.setItem(RECENT_KEY, JSON.stringify(recent)); } catch(e) {} }
+  function loadRecent() { try { const recent = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); const section = document.getElementById('recentSection'); const grid = document.getElementById('recentGrid'); if (!recent.length) { section.style.display = 'none'; return; } section.style.display = 'block'; grid.innerHTML = ''; recent.forEach(r => { const pc = r.privacyScore >= 7 ? 'chip-green' : r.privacyScore >= 5 ? 'chip-amber' : 'chip-red'; const cc = r.cookieScore >= 7 ? 'chip-green' : r.cookieScore >= 5 ? 'chip-amber' : 'chip-red'; grid.innerHTML += `<div class="recent-card" onclick="qs('${r.site}')"><div class="recent-name">${r.site}</div><div class="recent-scores"><span class="mini-chip ${pc}">Privacy ${r.privacyScore}</span><span class="mini-chip ${cc}">Cookies ${r.cookieScore}</span></div></div>`; }); } catch(e) {} }
+  async function startScan() { let url = document.getElementById('urlInput').value.trim(); if (!url) return; if (!url.startsWith('http')) url = 'https://' + url; const domain = url.replace(/https?:\/\//, '').replace(/\/.*/, ''); document.getElementById('checkBtn').disabled = true; document.getElementById('resultState').style.display = 'none'; document.getElementById('recentSection').style.display = 'none'; document.getElementById('loadMsg').textContent = 'Analyzing ' + domain + '...'; document.getElementById('loadingState').style.display = 'block'; try { const res = await fetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ domain }) }); const j = await res.json(); if (j.error) throw new Error(j.error); render(j); } catch(e) { document.getElementById('loadingState').style.display = 'none'; document.getElementById('checkBtn').disabled = false; alert('Analysis failed. Please try again.'); loadRecent(); } }
+  function render(j) { document.getElementById('loadingState').style.display = 'none'; document.getElementById('checkBtn').disabled = false; document.getElementById('privRing').className = 'score-ring ' + scoreClass(j.privacyScore); document.getElementById('privNum').textContent = j.privacyScore; document.getElementById('cookRing').className = 'score-ring ' + scoreClass(j.cookieScore); document.getElementById('cookNum').textContent = j.cookieScore; document.getElementById('resultSite').textContent = j.site; document.getElementById('resultVerdict').textContent = verdictText(j.privacyScore, j.cookieScore); const chips = document.getElementById('resultChips'); chips.innerHTML = ''; (j.chips || []).forEach(c => { const cls = c.level === 'red' ? 'chip-red' : c.level === 'green' ? 'chip-green' : 'chip-amber'; chips.innerHTML += `<span class="chip ${cls}">${c.label}</span>`; }); document.getElementById('summaryShort').textContent = j.collectShort || ''; document.getElementById('detailText').textContent = j.collectDetail || ''; document.getElementById('detailText').classList.remove('open'); document.getElementById('expandBtn').textContent = 'Show full details ↓'; const sells = document.getElementById('statSells'); sells.textContent = j.sells || '—'; sells.className = 'stat-val ' + statColor(j.sells); const optout = document.getElementById('statOptout'); optout.textContent = j.optout || '—'; optout.className = 'stat-val ' + statColor(j.optout); const gdpr = document.getElementById('statGdpr'); gdpr.textContent = j.gdpr || '—'; gdpr.className = 'stat-val ' + statColor(j.gdpr); saveRecent({ site: j.site, privacyScore: j.privacyScore, cookie
