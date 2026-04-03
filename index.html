@@ -6,25 +6,14 @@
 <title>ProtectMyData — Know what websites do with your data</title>
 <style>
   :root {
-    --bg: #f5f4f0;
-    --surface: #ffffff;
-    --border: rgba(0,0,0,0.08);
-    --border-strong: rgba(0,0,0,0.14);
-    --text: #0f0f0f;
-    --text-muted: #6b6b6b;
-    --text-faint: #aaaaaa;
-    --blue: #1a56db;
-    --blue-light: #e8f0fe;
-    --blue-text: #1a3c8f;
-    --green: #166534;
-    --green-light: #dcfce7;
-    --amber: #92400e;
-    --amber-light: #fef3c7;
-    --red: #991b1b;
-    --red-light: #fee2e2;
-    --radius: 14px;
-    --radius-sm: 8px;
-    --radius-pill: 100px;
+    --bg: #f5f4f0; --surface: #ffffff;
+    --border: rgba(0,0,0,0.08); --border-strong: rgba(0,0,0,0.14);
+    --text: #0f0f0f; --text-muted: #6b6b6b; --text-faint: #aaaaaa;
+    --blue: #1a56db; --blue-light: #e8f0fe; --blue-text: #1a3c8f;
+    --green: #166534; --green-light: #dcfce7;
+    --amber: #92400e; --amber-light: #fef3c7;
+    --red: #991b1b; --red-light: #fee2e2;
+    --radius: 14px; --radius-sm: 8px; --radius-pill: 100px;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 15px; line-height: 1.5; }
@@ -58,7 +47,7 @@
   .result-top { display: flex; gap: 20px; align-items: center; margin-bottom: 20px; }
   .scores { display: flex; gap: 10px; flex-shrink: 0; }
   .score-ring { width: 72px; height: 72px; border-radius: 50%; display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px solid transparent; }
-  .score-ring .num { font-size: 26px; font-weight: 500; font-family: monospace; line-height: 1; }
+  .score-ring .num { font-size: 20px; font-weight: 500; font-family: monospace; line-height: 1; }
   .score-ring .lbl { font-size: 9px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.05em; margin-top: 2px; }
   .score-green { background: var(--green-light); border-color: rgba(22,101,52,0.2); }
   .score-green .num { color: var(--green); }
@@ -86,9 +75,7 @@
   .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 14px; }
   .stat-label { font-size: 11px; color: var(--text-faint); margin-bottom: 5px; }
   .stat-val { font-size: 13px; font-weight: 500; }
-  .val-red { color: var(--red); }
-  .val-amber { color: var(--amber); }
-  .val-green { color: var(--green); }
+  .val-red { color: var(--red); } .val-amber { color: var(--amber); } .val-green { color: var(--green); }
   .actions { display: flex; gap: 8px; flex-wrap: wrap; }
   .btn-secondary { font-size: 13px; padding: 9px 16px; border: 1px solid var(--border-strong); border-radius: var(--radius-sm); background: var(--surface); color: var(--text-muted); cursor: pointer; }
   .btn-secondary:hover { background: var(--bg); color: var(--text); }
@@ -204,11 +191,14 @@
   function toggleDetail() { const d = document.getElementById('detailText'); const b = document.getElementById('expandBtn'); const open = d.classList.toggle('open'); b.textContent = open ? 'Show less ↑' : 'Show full details ↓'; }
   function reset() { document.getElementById('resultState').style.display = 'none'; document.getElementById('urlInput').value = ''; document.getElementById('checkBtn').disabled = false; document.getElementById('expandBtn').textContent = 'Show full details ↓'; document.getElementById('detailText').classList.remove('open'); loadRecent(); }
   function saveRecent(data) { try { let recent = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); recent = recent.filter(r => r.site !== data.site); recent.unshift(data); recent = recent.slice(0, 6); localStorage.setItem(RECENT_KEY, JSON.stringify(recent)); } catch(e) {} }
-  function loadRecent() { try { const recent = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); const section = document.getElementById('recentSection'); const grid = document.getElementById('recentGrid'); if (!recent.length) { section.style.display = 'none'; return; } section.style.display = 'block'; grid.innerHTML = ''; recent.forEach(r => { const pc = r.privacyScore >= 7 ? 'chip-green' : r.privacyScore >= 5 ? 'chip-amber' : 'chip-red'; const cc = r.cookieScore >= 7 ? 'chip-green' : r.cookieScore >= 5 ? 'chip-amber' : 'chip-red'; grid.innerHTML += `<div class="recent-card" onclick="qs('${r.site}')"><div class="recent-name">${r.site}</div><div class="recent-scores"><span class="mini-chip ${pc}">Privacy ${r.privacyScore}</span><span class="mini-chip ${cc}">Cookies ${r.cookieScore}</span></div></div>`; }); } catch(e) {} }
+  function loadRecent() { try { const recent = JSON.parse(localStorage.getItem(RECENT_KEY) || '[]'); const section = document.getElementById('recentSection'); const grid = document.getElementById('recentGrid'); if (!recent.length) { section.style.display = 'none'; return; } section.style.display = 'block'; grid.innerHTML = ''; recent.forEach(r => { const pc = r.privacyScore >= 7 ? 'chip-green' : r.privacyScore >= 5 ? 'chip-amber' : 'chip-red'; const cc = r.cookieScore >= 7 ? 'chip-green' : r.cookieScore >= 5 ? 'chip-amber' : 'chip-red'; grid.innerHTML += `<div class="recent-card" onclick="qs('${r.site}')"><div class="recent-name">${r.site}</div><div class="recent-scores"><span class="mini-chip ${pc}">Privacy ${r.privacyScore}/10</span><span class="mini-chip ${cc}">Cookies ${r.cookieScore}/10</span></div></div>`; }); } catch(e) {} }
   async function startScan() { let url = document.getElementById('urlInput').value.trim(); if (!url) return; if (!url.startsWith('http')) url = 'https://' + url; const domain = url.replace(/https?:\/\//, '').replace(/\/.*/, ''); document.getElementById('checkBtn').disabled = true; document.getElementById('resultState').style.display = 'none'; document.getElementById('recentSection').style.display = 'none'; document.getElementById('loadMsg').textContent = 'Analyzing ' + domain + '...'; document.getElementById('loadingState').style.display = 'block'; try { const res = await fetch('/api/analyze', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ domain }) }); const j = await res.json(); if (j.error) throw new Error(j.error); render(j); } catch(e) { document.getElementById('loadingState').style.display = 'none'; document.getElementById('checkBtn').disabled = false; alert('Analysis failed. Please try again.'); loadRecent(); } }
-  function render(j) { document.getElementById('loadingState').style.display = 'none'; document.getElementById('checkBtn').disabled = false; document.getElementById('privRing').className = 'score-ring ' + scoreClass(j.privacyScore); document.getElementById('privNum').textContent = j.privacyScore; document.getElementById('cookRing').className = 'score-ring ' + scoreClass(j.cookieScore); document.getElementById('cookNum').textContent = j.cookieScore; document.getElementById('resultSite').textContent = j.site; document.getElementById('resultVerdict').textContent = verdictText(j.privacyScore, j.cookieScore); const chips = document.getElementById('resultChips'); chips.innerHTML = ''; (j.chips || []).forEach(c => { const cls = c.level === 'red' ? 'chip-red' : c.level === 'green' ? 'chip-green' : 'chip-amber'; chips.innerHTML += `<span class="chip ${cls}">${c.label}</span>`; }); document.getElementById('summaryShort').textContent = j.collectShort || ''; document.getElementById('detailText').textContent = j.collectDetail || ''; document.getElementById('detailText').classList.remove('open'); document.getElementById('expandBtn').textContent = 'Show full details ↓'; const sells = document.getElementById('statSells'); sells.textContent = j.sells || '—'; sells.className = 'stat-val ' + statColor(j.sells); const optout = document.getElementById('statOptout'); optout.textContent = j.optout || '—'; optout.className = 'stat-val ' + statColor(j.optout); const gdpr = document.getElementById('statGdpr'); gdpr.textContent = j.gdpr || '—'; gdpr.className = 'stat-val ' + statColor(j.gdpr); saveRecent({ site: j.site, privacyScore: j.privacyScore, cookieScore: j.cookieScore }); document.getElementById('resultState').style.display = 'block'; document.getElementById('recentSection').style.display = 'none'; }
+  function render(j) { document.getElementById('loadingState').style.display = 'none'; document.getElementById('checkBtn').disabled = false; document.getElementById('privRing').className = 'score-ring ' + scoreClass(j.privacyScore); document.getElementById('privNum').textContent = j.privacyScore + '/10'; document.getElementById('cookRing').className = 'score-ring ' + scoreClass(j.cookieScore); document.getElementById('cookNum').textContent = j.cookieScore + '/10'; document.getElementById('resultSite').textContent = j.site; document.getElementById('resultVerdict').textContent = verdictText(j.privacyScore, j.cookieScore); const chips = document.getElementById('resultChips'); chips.innerHTML = ''; (j.chips || []).forEach(c => { const cls = c.level === 'red' ? 'chip-red' : c.level === 'green' ? 'chip-green' : 'chip-amber'; chips.innerHTML += `<span class="chip ${cls}">${c.label}</span>`; }); document.getElementById('summaryShort').textContent = j.collectShort || ''; document.getElementById('detailText').textContent = j.collectDetail || ''; document.getElementById('detailText').classList.remove('open'); document.getElementById('expandBtn').textContent = 'Show full details ↓'; const sells = document.getElementById('statSells'); sells.textContent = j.sells || '—'; sells.className = 'stat-val ' + statColor(j.sells); const optout = document.getElementById('statOptout'); optout.textContent = j.optout || '—'; optout.className = 'stat-val ' + statColor(j.optout); const gdpr = document.getElementById('statGdpr'); gdpr.textContent = j.gdpr || '—'; gdpr.className = 'stat-val ' + statColor(j.gdpr); saveRecent({ site: j.site, privacyScore: j.privacyScore, cookieScore: j.cookieScore }); document.getElementById('resultState').style.display = 'block'; document.getElementById('recentSection').style.display = 'none'; }
   document.getElementById('urlInput').addEventListener('keydown', e => { if (e.key === 'Enter') startScan(); });
   loadRecent();
+  const urlParams = new URLSearchParams(window.location.search);
+  const autocheck = urlParams.get('autocheck');
+  if (autocheck) { document.getElementById('urlInput').value = autocheck; startScan(); }
 </script>
 </body>
 </html>
